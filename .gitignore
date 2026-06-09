@@ -47,3 +47,6 @@ next-env.d.ts
 # user uploads
 /public/uploads/*
 
+
+.vercel
+"prisma/dev.db" 
