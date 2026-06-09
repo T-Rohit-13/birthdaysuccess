@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model AppContent {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  key   String @unique
+  value String
+}
+
+model GalleryItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  photoUrl  String
+  songUrl   String?
+  caption   String?
+  createdAt DateTime @default(now())
+}
+
+model TimelineEvent {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  date        String
+  title       String
+  description String
+  photoUrl    String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Wish {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  message   String
+  createdAt DateTime @default(now())
+}
