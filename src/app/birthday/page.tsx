@@ -24,7 +24,10 @@ export default async function BirthdayPage() {
 
   return (
     <main>
-      <InteractiveGallery items={galleryItems} />
+      <InteractiveGallery
+        items={galleryItems}
+        friendName={contentMap['friend_name']}
+      />
 
       <CustomMessage
         birthdayMessage={contentMap['birthday_message']}

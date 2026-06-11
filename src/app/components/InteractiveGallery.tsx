@@ -11,7 +11,7 @@ interface GalleryItem {
   caption?: string | null;
 }
 
-export default function InteractiveGallery({ items }: { items: GalleryItem[] }) {
+export default function InteractiveGallery({ items, friendName }: { items: GalleryItem[], friendName?: string }) {
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -76,7 +76,7 @@ export default function InteractiveGallery({ items }: { items: GalleryItem[] }) 
       const newAudio = new Audio(item.songUrl);
       newAudio.volume = 0;
       newAudio.loop = true;
-      newAudio.play().catch(() => {});
+      newAudio.play().catch(() => { });
 
       // Smooth fade-in
       gsap.to(newAudio, { volume: 0.7, duration: 2, ease: 'power2.inOut' });
@@ -137,6 +137,16 @@ export default function InteractiveGallery({ items }: { items: GalleryItem[] }) 
 
   return (
     <section className={`${styles.section} ${styles.gallerySection}`} id="gallery">
+      {friendName && (
+        <div className={styles.birthdayHeader}>
+          <h1 className={styles.birthdayTitle}>
+            🎂 Happy Birthday, {friendName}! 🎂
+          </h1>
+          <p className={styles.birthdaySubtitle}>
+            ✨ This is all yours — made with love just for you ✨
+          </p>
+        </div>
+      )}
       <div className={styles.galleryGrid}>
         {items.map((item) => (
           <div
