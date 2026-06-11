@@ -17,15 +17,14 @@ export default function InteractiveGallery({ items, friendName }: { items: Galle
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
   const heartsContainerRef = useRef<HTMLDivElement>(null);
+  const starsRef = useRef<HTMLDivElement>(null);
 
-  // Disable right-click to deter casual image downloading
   useEffect(() => {
     const prevent = (e: Event) => e.preventDefault();
     document.addEventListener('contextmenu', prevent);
     return () => document.removeEventListener('contextmenu', prevent);
   }, []);
 
-  // Cleanup audio on unmount
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -35,11 +34,30 @@ export default function InteractiveGallery({ items, friendName }: { items: Galle
     };
   }, []);
 
-  // Spawn floating hearts inside lightbox
+  // Generate twinkling stars
+  useEffect(() => {
+    if (!starsRef.current) return;
+    for (let i = 0; i < 40; i++) {
+      const star = document.createElement('div');
+      star.style.cssText = `
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        left: ${Math.random() * 100}%;
+        top: ${Math.random() * 100}%;
+        opacity: 0;
+        animation: starTwinkle ${Math.random() * 3 + 1}s infinite ease-in-out;
+        animation-delay: ${Math.random() * 3}s;
+      `;
+      starsRef.current.appendChild(star);
+    }
+  }, []);
+
   const spawnHearts = useCallback(() => {
     if (!heartsContainerRef.current) return;
     const heartSymbols = ['❤️', '💖', '💕', '💗', '💜'];
-
     for (let i = 0; i < 20; i++) {
       setTimeout(() => {
         if (!heartsContainerRef.current) return;
@@ -57,8 +75,6 @@ export default function InteractiveGallery({ items, friendName }: { items: Galle
 
   const openLightbox = (item: GalleryItem) => {
     setSelectedItem(item);
-
-    // Stop any previously playing song with fade-out
     if (audioRef.current) {
       const oldAudio = audioRef.current;
       gsap.to(oldAudio, {
@@ -70,31 +86,23 @@ export default function InteractiveGallery({ items, friendName }: { items: Galle
         },
       });
     }
-
-    // Start this photo's unique song
     if (item.songUrl) {
       const newAudio = new Audio(item.songUrl);
       newAudio.volume = 0;
       newAudio.loop = true;
       newAudio.play().catch(() => { });
-
-      // Smooth fade-in
       gsap.to(newAudio, { volume: 0.7, duration: 2, ease: 'power2.inOut' });
       audioRef.current = newAudio;
       setIsPlaying(true);
-
       newAudio.addEventListener('ended', () => setIsPlaying(false));
     } else {
       audioRef.current = null;
       setIsPlaying(false);
     }
-
-    // Floating hearts effect
     setTimeout(spawnHearts, 300);
   };
 
   const closeLightbox = () => {
-    // Fade out audio smoothly
     if (audioRef.current) {
       const a = audioRef.current;
       gsap.to(a, {
@@ -108,7 +116,6 @@ export default function InteractiveGallery({ items, friendName }: { items: Galle
         },
       });
     }
-
     if (lightboxRef.current) {
       gsap.to(lightboxRef.current, {
         opacity: 0,
@@ -137,16 +144,29 @@ export default function InteractiveGallery({ items, friendName }: { items: Galle
 
   return (
     <section className={`${styles.section} ${styles.gallerySection}`} id="gallery">
+      <style>{`
+        @keyframes starTwinkle {
+          0%, 100% { opacity: 0; }
+          50% { opacity: 1; }
+        }
+      `}</style>
+
       {friendName && (
         <div className={styles.birthdayHeader}>
-          <h1 className={styles.birthdayTitle}>
-            🎂 Happy Birthday, {friendName}! 🎂
-          </h1>
-          <p className={styles.birthdaySubtitle}>
-            ✨ This is all yours — made with love just for you ✨
-          </p>
+          <div className={styles.birthdayStars} ref={starsRef} />
+          <span className={styles.birthdayRose}>🌹</span>
+          <span className={styles.birthdayTitle}>
+            Happy Birthday, {friendName}!
+          </span>
+          <p className={styles.birthdaySubtitle}>✦ it's all yours ✦</p>
+          <div className={styles.birthdayDivider}>
+            <div className={styles.birthdayLine} />
+            <span className={styles.birthdayDiamond}>♦</span>
+            <div className={styles.birthdayLineRight} />
+          </div>
         </div>
       )}
+
       <div className={styles.galleryGrid}>
         {items.map((item) => (
           <div
@@ -172,14 +192,11 @@ export default function InteractiveGallery({ items, friendName }: { items: Galle
         ))}
       </div>
 
-
       {selectedItem && (
         <>
           <div className={styles.heartsContainer} ref={heartsContainerRef} />
           <div className={styles.lightbox} onClick={closeLightbox}>
-            <button className={styles.closeBtn} onClick={closeLightbox}>
-              ✕
-            </button>
+            <button className={styles.closeBtn} onClick={closeLightbox}>✕</button>
             <div
               ref={lightboxRef}
               className={styles.lightboxInner}
@@ -196,10 +213,7 @@ export default function InteractiveGallery({ items, friendName }: { items: Galle
               )}
               {selectedItem.songUrl && (
                 <div className={styles.lightboxMusicControl}>
-                  <button
-                    className={styles.musicToggleBtn}
-                    onClick={togglePlayPause}
-                  >
+                  <button className={styles.musicToggleBtn} onClick={togglePlayPause}>
                     {isPlaying ? '⏸️' : '▶️'} {isPlaying ? 'Playing...' : 'Play Song'}
                   </button>
                   <div className={styles.musicVisualizer}>

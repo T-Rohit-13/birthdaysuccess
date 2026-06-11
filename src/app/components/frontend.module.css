@@ -305,6 +305,10 @@
 /* ======= GALLERY ======= */
 .gallerySection {
   background: linear-gradient(180deg, var(--color-bg-dark) 0%, var(--color-bg-section) 100%);
+  min-height: auto !important;
+  padding-top: 8rem !important;
+  padding-bottom: 4rem !important;
+  z-index: 10 !important;
 }
 
 .galleryGrid {
@@ -447,7 +451,6 @@
   border-color: rgba(255, 107, 107, 0.5);
 }
 
-/* Hearts container for lightbox */
 .heartsContainer {
   position: fixed;
   top: 0;
@@ -720,68 +723,12 @@
   }
 }
 
-/* ======= RESPONSIVE ======= */
-@media (max-width: 768px) {
-  .section {
-    padding: 4rem 1.5rem;
-  }
-
-  .aboutGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .galleryGrid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1rem;
-  }
-
-  .timelineEvent {
-    padding-right: 0;
-    padding-left: 40px;
-    justify-content: flex-start;
-  }
-
-  .timelineEvent:nth-child(even) {
-    padding-left: 40px;
-  }
-
-  .timelineLine {
-    left: 15px;
-    transform: none;
-  }
-
-  .timelineDot {
-    left: 15px;
-    transform: none;
-  }
-
-  .lightboxImage {
-    max-width: 95%;
-    max-height: 70vh;
-  }
-
-  .wishCard {
-    padding: 2rem 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .heroTitle {
-    font-size: 2rem;
-  }
-
-  .galleryGrid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 /* ======= MUSIC GALLERY & LIGHTBOX INTEGRATION ======= */
 .galleryMusicBadge {
   position: absolute;
   top: 15px;
   right: 15px;
   background: rgba(155, 93, 229, 0.85);
-  /* Lavender/purple theme accent */
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
   width: 36px;
@@ -897,57 +844,166 @@
   }
 }
 
-.gallerySection {
-  min-height: auto !important;
-  padding-top: 8rem !important;
-  padding-bottom: 4rem !important;
-  z-index: 10 !important;
+/* ======= RESPONSIVE ======= */
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 1.5rem;
+  }
+
+  .aboutGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .galleryGrid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  .timelineEvent {
+    padding-right: 0;
+    padding-left: 40px;
+    justify-content: flex-start;
+  }
+
+  .timelineEvent:nth-child(even) {
+    padding-left: 40px;
+  }
+
+  .timelineLine {
+    left: 15px;
+    transform: none;
+  }
+
+  .timelineDot {
+    left: 15px;
+    transform: none;
+  }
+
+  .lightboxImage {
+    max-width: 95%;
+    max-height: 70vh;
+  }
+
+  .wishCard {
+    padding: 2rem 1.5rem;
+  }
 }
 
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
 
+  .galleryGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ======= BIRTHDAY HEADER ======= */
 .birthdayHeader {
   text-align: center;
-  padding: 3rem 1rem 1rem;
-  background: linear-gradient(135deg, #1a0a2e, #2d1b4e);
+  padding: 4rem 2rem 3rem;
+  background: radial-gradient(ellipse at top, #1a0533 0%, #080818 70%);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+  width: 100%;
+}
+
+.birthdayStars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.birthdayRose {
+  font-size: 2rem;
+  animation: roseFloat 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes roseFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .birthdayTitle {
   font-family: var(--font-dancing), cursive;
-  font-size: 3.5rem;
-  background: linear-gradient(90deg, #ff6b9d, #c44dff);
+  font-size: 3.2rem;
+  background: linear-gradient(135deg, #ff9de2, #ff6bcd, #c44dff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: fadeInDown 1.5s ease;
-  margin-bottom: 0.5rem;
+  background-clip: text;
+  margin: 1rem 0 0.3rem;
+  display: block;
+  animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  from {
+    filter: brightness(1);
+  }
+
+  to {
+    filter: brightness(1.3);
+  }
 }
 
 .birthdaySubtitle {
   font-family: var(--font-dancing), cursive;
-  font-size: 1.8rem;
+  font-style: italic;
+  font-size: 1.6rem;
   color: #ffd700;
-  animation: fadeInUp 1.5s ease;
+  letter-spacing: 4px;
+  margin: 0.8rem 0 0;
+  animation: subtitleFade 2s ease;
 }
 
-@keyframes fadeInDown {
+@keyframes subtitleFade {
   from {
     opacity: 0;
-    transform: translateY(-30px);
+    letter-spacing: 8px;
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    letter-spacing: 4px;
   }
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
+.birthdayDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 1.5rem auto 0;
+  width: 80%;
+}
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.birthdayLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c44dff);
+}
+
+.birthdayLineRight {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, #c44dff, transparent);
+}
+
+.birthdayDiamond {
+  color: #ff6bcd;
+  font-size: 0.8rem;
 }
